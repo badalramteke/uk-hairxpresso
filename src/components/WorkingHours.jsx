@@ -3,7 +3,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Clock } from 'lucide-react';
 import { WORKING_HOURS } from '../data/salonData';
-import { splitChars, animateHeading } from '../utils/gsapAnimations';
+import { splitChars, animateHeading, mStart } from '../utils/gsapAnimations';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -27,17 +27,17 @@ const WorkingHours = () => {
       animateHeading('wh');
 
       // Status badge pop
-      gsap.fromTo('.wh-status', { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: 'back.out(2)',
-        scrollTrigger: { trigger: '.wh-status', start: 'top 92%', once: true } });
+      gsap.fromTo('.wh-status', { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.35, ease: 'back.out(1.5)',
+        scrollTrigger: { trigger: '.wh-status', start: mStart(), once: true } });
 
       // Card scale
-      gsap.fromTo('.wh-card', { y: 30, opacity: 0, scale: 0.97 }, { y: 0, opacity: 1, scale: 1, duration: 0.8, ease: 'power3.out',
-        scrollTrigger: { trigger: '.wh-card', start: 'top 88%', once: true } });
+      gsap.fromTo('.wh-card', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: 'power2.out',
+        scrollTrigger: { trigger: '.wh-card', start: mStart(), once: true } });
 
       // Rows stagger from right
       ScrollTrigger.batch('.wh-row', {
-        start: 'top 90%', once: true,
-        onEnter: (batch) => gsap.fromTo(batch, { x: 30, opacity: 0 }, { x: 0, opacity: 1, stagger: 0.05, duration: 0.4, ease: 'power3.out' })
+        start: mStart(), once: true,
+        onEnter: (batch) => gsap.fromTo(batch, { x: 15, opacity: 0 }, { x: 0, opacity: 1, stagger: 0.03, duration: 0.3, ease: 'power2.out' })
       });
     }, ref);
     return () => ctx.revert();

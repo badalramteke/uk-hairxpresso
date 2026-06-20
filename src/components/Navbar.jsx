@@ -30,8 +30,8 @@ const Navbar = () => {
 
     // GSAP — stagger entrance of nav links on load
     gsap.fromTo(linksRef.current,
-      { y: -20, opacity: 0 },
-      { y: 0, opacity: 1, stagger: 0.08, duration: 0.7, ease: 'power3.out', delay: 3.5 }
+      { y: -12, opacity: 0 },
+      { y: 0, opacity: 1, stagger: 0.05, duration: 0.4, ease: 'power2.out', delay: 2 }
     );
 
     return () => window.removeEventListener('scroll', handleScroll);

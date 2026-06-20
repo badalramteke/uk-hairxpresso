@@ -4,7 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { GraduationCap, Tag, Sparkles } from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa';
 import { OFFERS } from '../data/salonData';
-import { splitChars, animateHeading, batchCards } from '../utils/gsapAnimations';
+import { splitChars, animateHeading, batchCards, mStart } from '../utils/gsapAnimations';
 import { useBooking } from '../context/BookingContext';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -20,14 +20,14 @@ const Offers = () => {
 
       // Student banner
       gsap.fromTo('.student-banner',
-        { y: 40, opacity: 0, scale: 0.97 },
-        { y: 0, opacity: 1, scale: 1, duration: 1, ease: 'power3.out',
-          scrollTrigger: { trigger: '.student-banner', start: 'top 85%', once: true } }
+        { y: 25, opacity: 0, scale: 0.98 },
+        { y: 0, opacity: 1, scale: 1, duration: 0.6, ease: 'power2.out',
+          scrollTrigger: { trigger: '.student-banner', start: mStart(), once: true } }
       );
       // Decorative circles
       ScrollTrigger.batch('.deco-circle', {
-        start: 'top 85%', once: true,
-        onEnter: (batch) => gsap.fromTo(batch, { scale: 0, opacity: 0 }, { scale: 1, opacity: 0.07, stagger: 0.05, duration: 0.5, ease: 'back.out(1.5)' })
+        start: mStart(), once: true,
+        onEnter: (batch) => gsap.fromTo(batch, { scale: 0, opacity: 0 }, { scale: 1, opacity: 0.07, stagger: 0.04, duration: 0.35, ease: 'back.out(1.5)' })
       });
 
       batchCards('.offer-card', { rotateY: 5 });

@@ -4,7 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { MapPin, Phone, Clock, Navigation } from 'lucide-react';
 import { FaWhatsapp, FaInstagram } from 'react-icons/fa';
 import { SALON_INFO } from '../data/salonData';
-import { splitChars, animateHeading, batchCards } from '../utils/gsapAnimations';
+import { splitChars, animateHeading, batchCards, mStart } from '../utils/gsapAnimations';
 import { useBooking } from '../context/BookingContext';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -17,23 +17,23 @@ const Contact = () => {
     const ctx = gsap.context(() => {
       animateHeading('ct');
 
-      // Location cards — slide from left
+      // Location cards
       ScrollTrigger.batch('.loc-card', {
-        start: 'top 88%', once: true,
-        onEnter: (batch) => gsap.fromTo(batch, { x: -50, opacity: 0 }, { x: 0, opacity: 1, stagger: 0.15, duration: 0.8, ease: 'power3.out' })
+        start: mStart(), once: true,
+        onEnter: (batch) => gsap.fromTo(batch, { x: -25, opacity: 0 }, { x: 0, opacity: 1, stagger: 0.1, duration: 0.5, ease: 'power2.out' })
       });
 
-      // MAIN badge bounce
-      gsap.fromTo('.main-badge', { scale: 0 }, { scale: 1, duration: 0.4, ease: 'back.out(2.5)',
-        scrollTrigger: { trigger: '.loc-card', start: 'top 82%', once: true } });
+      // MAIN badge
+      gsap.fromTo('.main-badge', { scale: 0 }, { scale: 1, duration: 0.3, ease: 'back.out(2)',
+        scrollTrigger: { trigger: '.loc-card', start: mStart(), once: true } });
 
-      // Map slide from right
-      gsap.fromTo('.map-wrap', { x: 50, opacity: 0, scale: 0.96 }, { x: 0, opacity: 1, scale: 1, duration: 0.9, ease: 'power3.out',
-        scrollTrigger: { trigger: '.map-wrap', start: 'top 85%', once: true } });
+      // Map
+      gsap.fromTo('.map-wrap', { x: 25, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: 'power2.out',
+        scrollTrigger: { trigger: '.map-wrap', start: mStart(), once: true } });
 
       // CTA buttons
-      gsap.fromTo('.ct-btns', { y: 25, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out',
-        scrollTrigger: { trigger: '.ct-btns', start: 'top 92%', once: true } });
+      gsap.fromTo('.ct-btns', { y: 15, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: 'power2.out',
+        scrollTrigger: { trigger: '.ct-btns', start: mStart(), once: true } });
     }, ref);
     return () => ctx.revert();
   }, []);

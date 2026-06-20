@@ -4,7 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Star, Quote } from 'lucide-react';
 import { FaGoogle } from 'react-icons/fa';
 import { TESTIMONIALS, SALON_INFO } from '../data/salonData';
-import { splitChars, animateHeading, batchCards } from '../utils/gsapAnimations';
+import { splitChars, animateHeading, batchCards, mStart } from '../utils/gsapAnimations';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -26,27 +26,27 @@ const Testimonials = () => {
       animateHeading('rv');
 
       // Rating bar bounce
-      gsap.fromTo('.rv-rating', { y: 18, opacity: 0, scale: 0.9 }, { y: 0, opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.5)',
-        scrollTrigger: { trigger: '.rv-rating', start: 'top 92%', once: true } });
+      gsap.fromTo('.rv-rating', { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: 'power2.out',
+        scrollTrigger: { trigger: '.rv-rating', start: mStart(), once: true } });
 
       // Cards
       batchCards('.review-card', { rotateX: 8 });
 
       // Quote icons — spin-in
       ScrollTrigger.batch('.quote-icon', {
-        start: 'top 85%', once: true,
+        start: mStart(), once: true,
         onEnter: (batch) => gsap.fromTo(batch, { scale: 0, rotation: -90 }, { scale: 1, rotation: 0, stagger: 0.06, duration: 0.4, ease: 'back.out(2)' })
       });
 
       // Avatars — bounce
       ScrollTrigger.batch('.rev-avatar', {
-        start: 'top 85%', once: true,
+        start: mStart(), once: true,
         onEnter: (batch) => gsap.fromTo(batch, { scale: 0 }, { scale: 1, stagger: 0.08, duration: 0.4, ease: 'back.out(2.5)' })
       });
 
       // CTA
-      gsap.fromTo('.rv-cta', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out',
-        scrollTrigger: { trigger: '.rv-cta', start: 'top 92%', once: true } });
+      gsap.fromTo('.rv-cta', { y: 15, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: 'power2.out',
+        scrollTrigger: { trigger: '.rv-cta', start: mStart(), once: true } });
     }, ref);
     return () => ctx.revert();
   }, []);

@@ -3,40 +3,39 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Camera } from 'lucide-react';
 import { GALLERY_IMAGES, GALLERY_FILTERS } from '../data/salonData';
-import { splitChars, animateHeading } from '../utils/gsapAnimations';
+import { splitChars, animateHeading, mStart } from '../utils/gsapAnimations';
 
 gsap.registerPlugin(ScrollTrigger);
 
 function GalleryCard({ item, index }) {
   const [hover, setHover] = useState(false);
   const cardRef = useRef(null);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     if (!cardRef.current) return;
-    const trigger = ScrollTrigger.create({
-      trigger: cardRef.current, start: 'top 90%', once: true,
-      onEnter: () => {
-        gsap.fromTo(cardRef.current,
-          { clipPath: 'inset(100% 0% 0% 0%)', scale: 1.05 },
-          { clipPath: 'inset(0% 0% 0% 0%)', scale: 1, duration: 1, ease: 'power4.out', delay: index * 0.08 }
-        );
-      }
-    });
-    return () => trigger.kill();
+    // Show card immediately with a smooth fade — no waiting for deep scroll
+    gsap.fromTo(cardRef.current,
+      { y: 30, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.5, ease: 'power2.out', delay: index * 0.08 }
+    );
   }, [index]);
 
   return (
     <div ref={cardRef}
       className="relative rounded-2xl overflow-hidden cursor-pointer group aspect-[4/5] bg-[#111]"
       onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onTouchStart={() => setHover(h => !h)}
-      style={{ clipPath: 'inset(100% 0% 0% 0%)' }}>
+      style={{ opacity: 0 }}>
       <img src={item.src} alt={`Before - ${item.alt}`}
         className="absolute inset-0 w-full h-full object-cover transition-all duration-700"
-        style={{ opacity: hover ? 0 : 1, transform: hover ? 'scale(1.08)' : 'scale(1)' }} loading="lazy" />
+        style={{ opacity: hover ? 0 : 1, transform: hover ? 'scale(1.08)' : 'scale(1)' }}
+        loading="eager"
+        onLoad={() => setLoaded(true)} />
       {item.afterSrc && (
         <img src={item.afterSrc} alt={`After - ${item.alt}`}
           className="absolute inset-0 w-full h-full object-cover transition-all duration-700"
-          style={{ opacity: hover ? 1 : 0, transform: hover ? 'scale(1)' : 'scale(1.08)' }} loading="lazy" />
+          style={{ opacity: hover ? 1 : 0, transform: hover ? 'scale(1)' : 'scale(1.08)' }}
+          loading="eager" />
       )}
       <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent" />
       <div className="absolute top-3 left-3">
@@ -61,11 +60,11 @@ const Gallery = () => {
     const ctx = gsap.context(() => {
       animateHeading('gal');
 
-      // Filter tabs — bounce
-      ScrollTrigger.batch('.gal-filter', {
-        start: 'top 92%', once: true,
-        onEnter: (batch) => gsap.fromTo(batch, { y: 12, opacity: 0, scale: 0.9 }, { y: 0, opacity: 1, scale: 1, stagger: 0.05, duration: 0.4, ease: 'back.out(1.4)' })
-      });
+      // Filter tabs — bounce in immediately
+      gsap.fromTo('.gal-filter',
+        { y: 12, opacity: 0, scale: 0.9 },
+        { y: 0, opacity: 1, scale: 1, stagger: 0.05, duration: 0.4, ease: 'back.out(1.4)', delay: 0.2 }
+      );
     }, ref);
     return () => ctx.revert();
   }, []);

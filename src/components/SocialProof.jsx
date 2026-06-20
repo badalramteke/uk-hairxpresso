@@ -8,12 +8,12 @@ gsap.registerPlugin(ScrollTrigger);
 const stats = [
   { icon: Users, value: 5000, suffix: '+', label: 'Happy Clients', decimal: false },
   { icon: Calendar, value: 5, suffix: '+', label: 'Years in Ramtek', decimal: false },
-  { icon: MapPin, value: 2, suffix: '', label: 'Locations', decimal: false },
+  { icon: MapPin, value: 1, suffix: '', label: 'Location', decimal: false },
   { icon: Star, value: 4.9, suffix: '', label: 'Avg. Rating', decimal: true },
 ];
 
 const ROW1 = ['UK HAIRXPRESSO', '✦', 'RAMTEK', '✦', 'LUXURY GROOMING', '✦', 'SINCE 2019', '✦', 'BEARD STYLING', '✦', 'HAIR SPA', '✦'];
-const ROW2 = ['TATTOO STUDIO', '✦', 'MANICURE', '✦', 'NAGARDHAN', '✦', 'PRO GROOMING', '✦', 'PREMIUM PRODUCTS', '✦', 'EXPERT STYLISTS', '✦'];
+const ROW2 = ['BODY CARE', '✦', 'MANICURE', '✦', 'RAMTEK', '✦', 'PRO GROOMING', '✦', 'PREMIUM PRODUCTS', '✦', 'EXPERT STYLISTS', '✦'];
 
 function Marquee({ items, speed = 30, reverse = false }) {
   const trackRef = useRef(null);
@@ -60,26 +60,28 @@ function StatCounter({ stat, index }) {
     const el = ref.current;
     if (!el) return;
 
+    const mobile = window.innerWidth < 768;
     const trigger = ScrollTrigger.create({
       trigger: el,
-      start: 'top 85%',
+      start: mobile ? 'top 98%' : 'top 90%',
+      once: true,
       onEnter: () => {
         if (triggered.current) return;
         triggered.current = true;
 
-        // Animate counter
+        // Animate counter — fast
         const obj = { val: 0 };
         gsap.to(obj, {
           val: stat.value,
-          duration: 2.5,
+          duration: mobile ? 0.8 : 1.2,
           ease: 'power2.out',
           onUpdate: () => setCount(stat.decimal ? parseFloat(obj.val.toFixed(1)) : Math.floor(obj.val))
         });
 
-        // Entrance animation with stagger
+        // Entrance — snappy
         gsap.fromTo(el,
-          { opacity: 0, y: 50, scale: 0.8 },
-          { opacity: 1, y: 0, scale: 1, duration: 1, ease: 'back.out(1.4)', delay: index * 0.15 }
+          { opacity: 0, y: mobile ? 15 : 25 },
+          { opacity: 1, y: 0, duration: mobile ? 0.35 : 0.5, ease: 'power2.out', delay: index * 0.06 }
         );
       }
     });

@@ -7,10 +7,10 @@
 
 export const SALON_INFO = {
   name: "UK HairXpresso",
-  tagline: "Premium Unisex Salon & Tattoo Studio",
+  tagline: "Premium Unisex Salon",
   subtitle: "Where Style Meets",
   subtitleAccent: "Luxury",
-  description: "Ramtek & Nagardhan's finest grooming destination. Expert cuts, beard styling, hair spa — crafted with precision for every look.",
+  description: "Ramtek's finest grooming destination. Expert cuts, beard styling, hair spa — crafted with precision for every look.",
   phone1: "9370169876",
   phone2: "9172462427",
   whatsapp: "918767708514",
@@ -34,17 +34,6 @@ export const SALON_INFO = {
       mapQuery: "Old+Blue+Tick+Cafe+Near+KITS+College+Mauda+Road+Ramtek+Maharashtra",
       hours: "Mon–Sat: 9AM–9PM | Sun: 10AM–7PM",
       primary: true,
-    },
-    {
-      id: 'nagardhan',
-      name: "Nagardhan Branch",
-      address: "Killa Road, Nagardhan, Maharashtra",
-      landmark: "",
-      phone1: "9370169876",
-      phone2: null,
-      mapQuery: "Nagardhan+Maharashtra+India",
-      hours: "Mon–Sat: 9AM–9PM | Sun: 10AM–7PM",
-      primary: false,
     }
   ]
 };
@@ -136,19 +125,48 @@ export const INDIVIDUAL_SERVICES = [
     { name: "Pedicure", price: "₹250+" },
     { name: "Head Massage", price: "₹150+" }
   ]},
-  { category: "Tattoo", items: [
-    { name: "Small Tattoo", price: "₹500+" },
-    { name: "Medium Tattoo", price: "₹1500+" },
-    { name: "Large Tattoo", price: "₹3000+" },
-    { name: "Custom Design", price: "On Consultation" }
-  ]}
+
+];
+
+/** Flat list of all bookable services/packages for the booking dropdown */
+export const BOOKABLE_SERVICES = [
+  // Packages
+  { group: "📦 Packages", items: [
+    "Standard Package — ₹299",
+    "Semi Standard Package — ₹499",
+    "Mid Package — ₹999",
+    "Pre-Grooming Package — ₹2999",
+    "Pro Package — ₹3999",
+  ]},
+  // Individual services
+  { group: "✂️ Hair", items: [
+    "Haircut — ₹100+",
+    "Hair Wash & Style — ₹150+",
+    "Hair Coloring — ₹500+",
+    "Hair Spa — ₹400+",
+    "Keratin Treatment — ₹2000+",
+  ]},
+  { group: "🧔 Beard & Face", items: [
+    "Beard Trim & Set — ₹80+",
+    "Clean Shave — ₹100+",
+    "Fruit Facial — ₹300+",
+    "O3+ Facial — ₹500+",
+    "D-Tan — ₹250+",
+  ]},
+  { group: "💆 Body Care", items: [
+    "Body Polishing — ₹800+",
+    "Body Trimming — ₹300+",
+    "Manicure — ₹200+",
+    "Pedicure — ₹250+",
+    "Head Massage — ₹150+",
+  ]},
 ];
 
 export const OFFERS = [
   {
     id: 1,
     title: "10% OFF for Students",
-    description: "Show valid college ID · Valid at both locations",
+    description: "Show valid college ID · Valid at Ramtek location",
     badge: "Student Special",
     type: "highlight",
     ctaText: "Claim Offer",
@@ -275,14 +293,14 @@ export const TESTIMONIALS = [
 export const SOCIAL_PROOF = {
   happyClients: 5000,
   yearsExperience: 5,
-  locations: 2,
+  locations: 1,
   avgRating: 4.9
 };
 
 export const MARQUEE_TEXT = [
   "LUXURY GROOMING", "SINCE 2019", "BEARD STYLING", "UK HAIRXPRESSO",
-  "RAMTEK", "HAIR COLORING", "HAIR SPA", "TATTOO STUDIO",
-  "MANICURE", "NAGARDHAN", "PREMIUM PRODUCTS", "EXPERT STYLISTS"
+  "RAMTEK", "HAIR COLORING", "HAIR SPA",
+  "MANICURE", "PREMIUM PRODUCTS", "EXPERT STYLISTS"
 ];
 
 export const GALLERY_IMAGES = [
@@ -309,7 +327,7 @@ export const FAQS = [
   {
     id: 1,
     question: "Is parking available at your salon?",
-    answer: "Yes! Free parking is available right outside our Ramtek location (near KITS College, Mauda Road). At our Nagardhan location on Killa Road, street parking is easily available nearby."
+    answer: "Yes! Free parking is available right outside our Ramtek location (near KITS College, Mauda Road)."
   },
   {
     id: 2,
@@ -331,11 +349,7 @@ export const FAQS = [
     question: "How do I get the student discount?",
     answer: "Just carry your valid college or university ID card to the salon. Show it to our staff and you will automatically get 10% off on all services. Simple as that!"
   },
-  {
-    id: 6,
-    question: "Do you do tattoos as well?",
-    answer: "Yes! UK HairXpresso also houses a professional Tattoo Studio. Contact us via WhatsApp or visit the salon to discuss your tattoo design and pricing."
-  },
+
   {
     id: 7,
     question: "How long does a typical appointment take?",
@@ -345,5 +359,10 @@ export const FAQS = [
     id: 8,
     question: "What are your working hours?",
     answer: "We are open Monday to Saturday from 9:00 AM to 9:00 PM, and Sunday from 10:00 AM to 7:00 PM. Closed on major festivals — check WhatsApp for holiday updates."
+  },
+  {
+    id: 9,
+    question: "When can I book an appointment?",
+    answer: "You can book for tomorrow's appointment starting from today evening at 9:00 PM. This gives us time to prepare your slot. Walk-ins are always welcome during opening hours!"
   }
 ];

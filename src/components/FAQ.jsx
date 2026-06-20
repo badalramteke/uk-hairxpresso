@@ -4,7 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { HiChevronDown } from 'react-icons/hi';
 import { HelpCircle } from 'lucide-react';
 import { FAQS } from '../data/salonData';
-import { splitChars, animateHeading } from '../utils/gsapAnimations';
+import { splitChars, animateHeading, mStart } from '../utils/gsapAnimations';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -42,8 +42,8 @@ const FAQ = () => {
 
       // FAQ items — cascade from left
       ScrollTrigger.batch('.faq-item', {
-        start: 'top 90%', once: true,
-        onEnter: (batch) => gsap.fromTo(batch, { x: -40, opacity: 0 }, { x: 0, opacity: 1, stagger: 0.06, duration: 0.6, ease: 'power3.out' })
+        start: mStart(), once: true,
+        onEnter: (batch) => gsap.fromTo(batch, { x: -20, opacity: 0 }, { x: 0, opacity: 1, stagger: 0.04, duration: 0.4, ease: 'power2.out' })
       });
     }, ref);
     return () => ctx.revert();

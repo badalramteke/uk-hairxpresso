@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { TEAM } from '../data/salonData';
-import { splitChars, animateHeading } from '../utils/gsapAnimations';
+import { splitChars, animateHeading, mStart } from '../utils/gsapAnimations';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -10,32 +10,36 @@ const Team = () => {
   const ref = useRef(null);
 
   useEffect(() => {
+    const mobile = window.innerWidth < 768;
     const ctx = gsap.context(() => {
       animateHeading('tm');
 
-      // Cards — polygon clip-path reveal
+      // Cards
       ScrollTrigger.batch('.team-card', {
-        start: 'top 88%', once: true,
+        start: mobile ? 'top 98%' : 'top 90%', once: true,
         onEnter: (batch) => {
-          gsap.fromTo(batch,
-            { clipPath: 'polygon(0 100%, 100% 100%, 100% 100%, 0% 100%)', opacity: 0 },
-            { clipPath: 'polygon(0 0%, 100% 0%, 100% 100%, 0% 100%)', opacity: 1, stagger: 0.12, duration: 1, ease: 'power4.out' }
-          );
-          // Counter-zoom images
-          gsap.fromTo('.team-img', { scale: 1.3 }, { scale: 1, stagger: 0.12, duration: 1.2, ease: 'power3.out' });
+          if (mobile) {
+            gsap.fromTo(batch, { y: 20, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.06, duration: 0.4, ease: 'power2.out' });
+          } else {
+            gsap.fromTo(batch,
+              { clipPath: 'polygon(0 100%, 100% 100%, 100% 100%, 0% 100%)', opacity: 0 },
+              { clipPath: 'polygon(0 0%, 100% 0%, 100% 100%, 0% 100%)', opacity: 1, stagger: 0.08, duration: 0.7, ease: 'power3.out' }
+            );
+            gsap.fromTo('.team-img', { scale: 1.2 }, { scale: 1, stagger: 0.08, duration: 0.8, ease: 'power2.out' });
+          }
         }
       });
 
-      // Experience badges — bounce
+      // Badges — fast
       ScrollTrigger.batch('.exp-badge', {
-        start: 'top 82%', once: true,
-        onEnter: (batch) => gsap.fromTo(batch, { scale: 0, rotation: -45 }, { scale: 1, rotation: 0, stagger: 0.08, duration: 0.5, ease: 'back.out(2)' })
+        start: mStart(), once: true,
+        onEnter: (batch) => gsap.fromTo(batch, { scale: 0 }, { scale: 1, stagger: 0.05, duration: 0.3, ease: 'back.out(1.5)' })
       });
 
-      // Name text slide
+      // Names
       ScrollTrigger.batch('.team-name', {
-        start: 'top 85%', once: true,
-        onEnter: (batch) => gsap.fromTo(batch, { x: -20, opacity: 0 }, { x: 0, opacity: 1, stagger: 0.1, duration: 0.5, ease: 'power3.out' })
+        start: mStart(), once: true,
+        onEnter: (batch) => gsap.fromTo(batch, { x: -12, opacity: 0 }, { x: 0, opacity: 1, stagger: 0.06, duration: 0.35, ease: 'power2.out' })
       });
     }, ref);
     return () => ctx.revert();
@@ -61,7 +65,7 @@ const Team = () => {
           {TEAM.map((m) => (
             <div key={m.id}
               className="team-card rounded-2xl overflow-hidden border border-[#D4AF37]/[0.08] bg-[#111111] group transition-all duration-500 hover:border-[#D4AF37]/30 hover:translate-y-[-4px] hover:shadow-[0_0_40px_rgba(212,175,55,0.06)]"
-              style={{ clipPath: 'polygon(0 100%, 100% 100%, 100% 100%, 0% 100%)' }}>
+              style={{ opacity: 0 }}>
               <div className="relative aspect-square overflow-hidden">
                 <img src={m.image} alt={m.name} loading="lazy"
                   className="team-img w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />

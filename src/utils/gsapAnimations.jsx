@@ -1,8 +1,19 @@
-import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
+
+/** Detect mobile for reduced animations */
+export const isMobile = () => window.innerWidth < 768;
+
+/**
+ * Trigger start position — FIXED FOR MOBILE.
+ * 
+ * Previous: 'top bottom' on mobile → elements invisible until user scrolled
+ * past them entirely. Now uses 'top 98%' so elements animate in just before
+ * they enter the viewport, feeling instant without jank.
+ */
+export const mStart = () => isMobile() ? 'top 98%' : 'top 90%';
 
 /** Split text into <span> per character for GSAP stagger */
 export function splitChars(text, className = '') {
@@ -16,49 +27,67 @@ export function splitChars(text, className = '') {
 }
 
 /**
- * Animate a section heading block. Call inside gsap.context().
- * Expects elements with classes: {prefix}-label, {prefix}-char, {prefix}-title, {prefix}-line, {prefix}-sub
+ * Animate a section heading block — MOBILE OPTIMIZED.
+ * On mobile: simpler fade-up, no per-char rotateX, fires earlier.
+ * On desktop: full 3D char stagger.
  */
 export function animateHeading(prefix) {
+  const mobile = isMobile();
+  const start = mStart();
+  const dur = mobile ? 0.25 : 0.4;
+
   gsap.fromTo(`.${prefix}-label`,
-    { y: 15, opacity: 0 },
-    { y: 0, opacity: 1, duration: 0.5, ease: 'power3.out',
-      scrollTrigger: { trigger: `.${prefix}-label`, start: 'top 90%', once: true } }
+    { y: 8, opacity: 0 },
+    { y: 0, opacity: 1, duration: dur, ease: 'power2.out',
+      scrollTrigger: { trigger: `.${prefix}-label`, start, once: true } }
   );
 
-  gsap.fromTo(`.${prefix}-char`,
-    { y: 40, opacity: 0, rotateX: -35 },
-    { y: 0, opacity: 1, rotateX: 0, duration: 0.5, stagger: 0.02, ease: 'power3.out',
-      scrollTrigger: { trigger: `.${prefix}-title`, start: 'top 88%', once: true } }
-  );
+  if (mobile) {
+    // Mobile: animate the whole title as one block, skip per-char
+    gsap.fromTo(`.${prefix}-title`,
+      { y: 12, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.3, ease: 'power2.out',
+        scrollTrigger: { trigger: `.${prefix}-title`, start, once: true } }
+    );
+    // Set chars visible immediately since they start hidden
+    gsap.set(`.${prefix}-char`, { opacity: 1, y: 0, rotateX: 0 });
+  } else {
+    // Desktop: per-char 3D stagger
+    gsap.fromTo(`.${prefix}-char`,
+      { y: 25, opacity: 0, rotateX: -20 },
+      { y: 0, opacity: 1, rotateX: 0, duration: 0.4, stagger: 0.015, ease: 'power2.out',
+        scrollTrigger: { trigger: `.${prefix}-title`, start, once: true } }
+    );
+  }
 
   gsap.fromTo(`.${prefix}-line`,
     { width: 0 },
-    { width: 60, duration: 0.6, ease: 'power2.inOut',
-      scrollTrigger: { trigger: `.${prefix}-line`, start: 'top 92%', once: true } }
+    { width: 60, duration: 0.35, ease: 'power2.inOut',
+      scrollTrigger: { trigger: `.${prefix}-line`, start, once: true } }
   );
 
   if (document.querySelector(`.${prefix}-sub`)) {
     gsap.fromTo(`.${prefix}-sub`,
-      { y: 14, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.5, ease: 'power2.out',
-        scrollTrigger: { trigger: `.${prefix}-sub`, start: 'top 92%', once: true } }
+      { y: 8, opacity: 0 },
+      { y: 0, opacity: 1, duration: dur, ease: 'power2.out',
+        scrollTrigger: { trigger: `.${prefix}-sub`, start, once: true } }
     );
   }
 }
 
 /**
- * Batch-animate cards — single ScrollTrigger for all matching elements.
- * Much more performant than one ScrollTrigger per card.
+ * Batch-animate cards — fires much earlier on mobile now.
+ * Reduced stagger and duration on mobile for snappier feel.
  */
 export function batchCards(selector, fromVars = {}) {
+  const mobile = isMobile();
   ScrollTrigger.batch(selector, {
-    start: 'top 88%',
+    start: mobile ? 'top 98%' : 'top 90%',
     once: true,
     onEnter: (batch) => {
       gsap.fromTo(batch,
-        { y: 50, opacity: 0, ...fromVars },
-        { y: 0, opacity: 1, stagger: 0.1, duration: 0.75, ease: 'power3.out', overwrite: true }
+        mobile ? { y: 12, opacity: 0 } : { y: 35, opacity: 0, ...fromVars },
+        { y: 0, opacity: 1, stagger: mobile ? 0.03 : 0.07, duration: mobile ? 0.3 : 0.55, ease: 'power2.out', overwrite: true }
       );
     }
   });

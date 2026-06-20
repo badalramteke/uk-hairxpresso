@@ -3,7 +3,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { FaInstagram } from 'react-icons/fa';
 import { SALON_INFO, INSTAGRAM_POSTS } from '../data/salonData';
-import { splitChars, animateHeading } from '../utils/gsapAnimations';
+import { splitChars, animateHeading, mStart, isMobile } from '../utils/gsapAnimations';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -16,24 +16,26 @@ const Instagram = () => {
 
       // Grid — random-order scale-up
       ScrollTrigger.batch('.insta-card', {
-        start: 'top 88%', once: true,
+        start: mStart(), once: true,
         onEnter: (batch) => {
           gsap.fromTo(batch,
-            { y: 40, opacity: 0, scale: 0.88 },
-            { y: 0, opacity: 1, scale: 1, stagger: { each: 0.06, from: 'random' }, duration: 0.7, ease: 'back.out(1.2)' }
+            { y: 25, opacity: 0, scale: 0.92 },
+            { y: 0, opacity: 1, scale: 1, stagger: { each: 0.04, from: 'random' }, duration: 0.5, ease: 'back.out(1.2)' }
           );
         }
       });
 
-      // Parallax on grid
-      gsap.to('.insta-grid', {
-        y: -20,
-        scrollTrigger: { trigger: ref.current, start: 'top bottom', end: 'bottom top', scrub: 1.5 }
-      });
+      // Parallax on grid — desktop only
+      if (!isMobile()) {
+        gsap.to('.insta-grid', {
+          y: -20,
+          scrollTrigger: { trigger: ref.current, start: 'top bottom', end: 'bottom top', scrub: 1.5 }
+        });
+      }
 
       // CTA button
-      gsap.fromTo('.ig-cta', { y: 25, opacity: 0, scale: 0.9 }, { y: 0, opacity: 1, scale: 1, duration: 0.6, ease: 'back.out(1.5)',
-        scrollTrigger: { trigger: '.ig-cta', start: 'top 92%', once: true } });
+      gsap.fromTo('.ig-cta', { y: 15, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: 'power2.out',
+        scrollTrigger: { trigger: '.ig-cta', start: mStart(), once: true } });
     }, ref);
     return () => ctx.revert();
   }, []);

@@ -4,7 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { MapPin, Phone, Clock, Heart } from 'lucide-react';
 import { FaWhatsapp, FaInstagram, FaGoogle } from 'react-icons/fa';
 import { SALON_INFO } from '../data/salonData';
-import { splitChars } from '../utils/gsapAnimations';
+import { splitChars, mStart, isMobile } from '../utils/gsapAnimations';
 import { useBooking } from '../context/BookingContext';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -26,27 +26,31 @@ const Footer = () => {
   useEffect(() => {
     const ctx = gsap.context(() => {
       // CTA banner
-      gsap.fromTo('.footer-cta', { y: 50, opacity: 0, scale: 0.96 }, { y: 0, opacity: 1, scale: 1, duration: 0.9, ease: 'power3.out',
-        scrollTrigger: { trigger: '.footer-cta', start: 'top 92%', once: true } });
+      gsap.fromTo('.footer-cta', { y: 25, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: 'power2.out',
+        scrollTrigger: { trigger: '.footer-cta', start: mStart(), once: true } });
 
-      // CTA title — char-by-char
-      gsap.fromTo('.ft-cta-char', { y: 30, opacity: 0, rotateX: -30 }, { y: 0, opacity: 1, rotateX: 0, stagger: 0.02, duration: 0.45, ease: 'power3.out',
-        scrollTrigger: { trigger: '.footer-cta', start: 'top 85%', once: true } });
+      // CTA title — char-by-char on desktop, block on mobile
+      if (isMobile()) {
+        gsap.set('.ft-cta-char', { opacity: 1, y: 0, rotateX: 0 });
+      } else {
+        gsap.fromTo('.ft-cta-char', { y: 20, opacity: 0, rotateX: -20 }, { y: 0, opacity: 1, rotateX: 0, stagger: 0.015, duration: 0.35, ease: 'power2.out',
+          scrollTrigger: { trigger: '.footer-cta', start: mStart(), once: true } });
+      }
 
-      // CTA button bounce
-      gsap.fromTo('.ft-cta-btn', { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, delay: 0.3, ease: 'back.out(1.5)',
-        scrollTrigger: { trigger: '.footer-cta', start: 'top 85%', once: true } });
+      // CTA button
+      gsap.fromTo('.ft-cta-btn', { scale: 0.9, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, delay: 0.15, ease: 'back.out(1.5)',
+        scrollTrigger: { trigger: '.footer-cta', start: mStart(), once: true } });
 
       // Footer columns
       ScrollTrigger.batch('.footer-col', {
-        start: 'top 92%', once: true,
-        onEnter: (batch) => gsap.fromTo(batch, { y: 35, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.1, duration: 0.7, ease: 'power3.out' })
+        start: mStart(), once: true,
+        onEnter: (batch) => gsap.fromTo(batch, { y: 20, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.06, duration: 0.4, ease: 'power2.out' })
       });
 
-      // Social icons bounce
+      // Social icons
       ScrollTrigger.batch('.social-icon', {
-        start: 'top 94%', once: true,
-        onEnter: (batch) => gsap.fromTo(batch, { scale: 0, rotation: -45 }, { scale: 1, rotation: 0, stagger: 0.07, duration: 0.4, ease: 'back.out(2)' })
+        start: mStart(), once: true,
+        onEnter: (batch) => gsap.fromTo(batch, { scale: 0 }, { scale: 1, stagger: 0.05, duration: 0.3, ease: 'back.out(1.5)' })
       });
     }, ref);
     return () => ctx.revert();
@@ -78,7 +82,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-10">
           <div className="footer-col" style={{ opacity: 0 }}>
             <img src="/images/logo_and_name.jpg" alt="UK HairXpresso" className="h-14 w-auto object-contain mb-4 rounded-lg" />
-            <p className="text-gray-500 text-sm leading-relaxed mb-5">Premium Unisex Salon & Tattoo Studio in Ramtek & Nagardhan, Maharashtra. Where style meets luxury.</p>
+            <p className="text-gray-500 text-sm leading-relaxed mb-5">Premium Unisex Salon in Ramtek, Maharashtra. Where style meets luxury.</p>
             <div className="flex items-center gap-3">
               <a href={SALON_INFO.instagramUrl} target="_blank" rel="noopener noreferrer"
                 className="social-icon w-9 h-9 rounded-full bg-[#111] border border-[#D4AF37]/15 flex items-center justify-center text-gray-500 hover:text-[#D4AF37] hover:border-[#D4AF37]/60 transition-all"
@@ -108,15 +112,6 @@ const Footer = () => {
               <div className="flex items-start gap-2"><MapPin size={14} className="text-[#D4AF37] mt-0.5 shrink-0" /><p className="text-gray-500 text-sm">Old Blue Tick Café, Near KITS College, Mauda Road, Ramtek</p></div>
               <div className="flex items-center gap-2"><Phone size={14} className="text-[#D4AF37] shrink-0" /><a href="tel:9370169876" className="text-gray-500 hover:text-[#D4AF37] text-sm transition-colors">9370169876</a></div>
               <div className="flex items-center gap-2"><Phone size={14} className="text-[#D4AF37] shrink-0" /><a href="tel:9172462427" className="text-gray-500 hover:text-[#D4AF37] text-sm transition-colors">9172462427</a></div>
-              <div className="flex items-center gap-2"><Clock size={14} className="text-[#D4AF37] shrink-0" /><p className="text-gray-500 text-sm">Mon–Sat: 9AM–9PM</p></div>
-            </div>
-          </div>
-
-          <div className="footer-col" style={{ opacity: 0 }}>
-            <h4 className="text-white font-bold font-cormorant text-lg mb-5">Nagardhan Branch</h4>
-            <div className="space-y-3">
-              <div className="flex items-start gap-2"><MapPin size={14} className="text-[#D4AF37] mt-0.5 shrink-0" /><p className="text-gray-500 text-sm">Killa Road, Nagardhan, Maharashtra</p></div>
-              <div className="flex items-center gap-2"><Phone size={14} className="text-[#D4AF37] shrink-0" /><a href="tel:9370169876" className="text-gray-500 hover:text-[#D4AF37] text-sm transition-colors">9370169876</a></div>
               <div className="flex items-center gap-2"><Clock size={14} className="text-[#D4AF37] shrink-0" /><p className="text-gray-500 text-sm">Mon–Sat: 9AM–9PM</p></div>
               <div className="flex items-center gap-2"><Clock size={14} className="text-[#D4AF37] shrink-0" /><p className="text-gray-500 text-sm">Sun: 10AM–7PM</p></div>
             </div>

@@ -16,7 +16,7 @@ export default defineConfig({
         manualChunks: {
           vendor: ['react', 'react-dom'],
           animations: ['gsap'],
-          icons: ['react-icons']
+          icons: ['react-icons', 'lucide-react']
         },
         chunkFileNames: 'assets/[name]-[hash].js',
         entryFileNames: 'assets/[name]-[hash].js',
@@ -26,6 +26,6 @@ export default defineConfig({
     chunkSizeWarningLimit: 1000
   },
   optimizeDeps: {
-    include: ['react', 'react-dom', 'gsap', 'react-icons']
+    include: ['react', 'react-dom', 'gsap', 'react-icons', 'lucide-react']
   }
 })

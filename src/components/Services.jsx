@@ -4,7 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Check, Scissors, ArrowRight } from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa';
 import { GROOMING_PACKAGES } from '../data/salonData';
-import { splitChars, animateHeading, batchCards } from '../utils/gsapAnimations';
+import { splitChars, animateHeading, batchCards, mStart } from '../utils/gsapAnimations';
 import { useBooking } from '../context/BookingContext';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -20,7 +20,7 @@ const Services = () => {
 
       // Stagger checkmarks after cards enter
       ScrollTrigger.batch('.svc-item', {
-        start: 'top 90%', once: true,
+        start: mStart(), once: true,
         onEnter: (batch) => gsap.fromTo(batch, { x: -12, opacity: 0 }, { x: 0, opacity: 1, stagger: 0.03, duration: 0.35, ease: 'power2.out' })
       });
     }, ref);
@@ -95,7 +95,7 @@ const Services = () => {
             </div>
           ))}
         </div>
-        <p className="text-center text-xs text-gray-600 mt-8">* Prices may vary. Contact for individual services & tattoo enquiries.</p>
+        <p className="text-center text-xs text-gray-600 mt-8">* Prices may vary. Contact for individual service enquiries.</p>
       </div>
     </section>
   );
