@@ -23,16 +23,26 @@ export default function Hero() {
 
       // Mobile: skip per-char, just show text blocks
       if (mobile) {
+        // Set all child elements visible immediately — they have inline opacity:0
+        // and we only animate the parent containers on mobile
+        gsap.set('.hero-eyebrow-char', { opacity: 1, y: 0 });
+        gsap.set('.hero-word', { yPercent: 0, opacity: 1 });
+        gsap.set('.luxury-char', { opacity: 1, y: 0, rotateY: 0, scale: 1 });
+        gsap.set('.hero-subtitle-word', { opacity: 1, y: 0 });
+        gsap.set('.hero-loc-char', { opacity: 1 });
+
         gsap.set('.hero-eyebrow', { opacity: 0, y: 10 });
         gsap.set('.hero-heading', { opacity: 0, y: 20 });
         gsap.set('.hero-subtitle', { opacity: 0, y: 10 });
         gsap.set('.hero-location', { opacity: 0 });
+        gsap.set('.hero-gold-line', { width: 0, opacity: 0 });
 
         const tl = gsap.timeline({ delay: 1.9 });
 
         tl.to('.hero-logo', { opacity: 1, scale: 1, duration: 0.5, ease: 'power3.out' });
         tl.to('.hero-eyebrow', { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' }, '-=0.2');
         tl.to('.hero-heading', { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' }, '-=0.15');
+        tl.to('.hero-gold-line', { width: 60, opacity: 1, duration: 0.3, ease: 'power2.inOut' }, '-=0.1');
         tl.to('.hero-subtitle', { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' }, '-=0.15');
         tl.to('.hero-btn', { opacity: 1, y: 0, scale: 1, stagger: 0.1, duration: 0.35, ease: 'back.out(1.5)' }, '-=0.1');
         tl.to('.hero-location', { opacity: 1, duration: 0.3 }, '-=0.15');
@@ -129,7 +139,7 @@ export default function Hero() {
 
       {/* Parallax BG */}
       <div ref={bgRef} className="absolute inset-[-10%] bg-cover bg-center will-change-transform"
-        style={{ backgroundImage: "url('/images/pexels-photo-3992874.jpeg')", opacity: 0.12 }} />
+        style={{ backgroundImage: "url('/images/pexels-photo-3992874.jpeg')", opacity: 0.8 }} />
 
       {/* Overlays */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/70 via-[#050505]/40 to-[#050505]" />
